@@ -1,0 +1,4 @@
+{
+  "commands.advhelper.export.success": "成功导出进度",
+  "commands.advhelper.export.fail": "导出进度失败"
+}

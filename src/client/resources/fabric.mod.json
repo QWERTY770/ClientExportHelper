@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"id": "advhelper",
+	"version": "1.0.0",
+	"name": "Advancement Helper",
+	"description": "Useful tools for advancements",
+	"authors": [
+		"QWERTY770"
+	],
+	"contact": {
+		"homepage": "https://github.com/QWERTY770",
+		"sources": "https://github.com/QWERTY770"
+	},
+	"license": "MIT License",
+	"environment": "*",
+	"entrypoints": {
+		"client": [
+			"io.github.qwerty770.AdvancementHelper"
+		]
+	},
+	"mixins": [
+	],
+	"depends": {
+		"fabricloader": ">=0.14.21",
+		"minecraft": ">=1.19",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+	}
+}

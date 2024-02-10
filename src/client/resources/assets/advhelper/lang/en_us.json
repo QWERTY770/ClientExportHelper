@@ -1,0 +1,4 @@
+{
+  "commands.advhelper.export.success": "Successfully exported advancements",
+  "commands.advhelper.export.fail": "Failed to export advancements"
+}
