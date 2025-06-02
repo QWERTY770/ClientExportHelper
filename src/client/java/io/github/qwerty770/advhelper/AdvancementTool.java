@@ -49,12 +49,10 @@ public class AdvancementTool {
         }
         try {
             return Advancement.CODEC.encodeStart(JsonOps.INSTANCE, builder.build(holder.id()).value()).getOrThrow();
-        } catch (IllegalStateException e) {
-            AdvancementHelper.LOGGER.error("Failed to encode the advancement {}", holder.id());
-            AdvancementHelper.LOGGER.error(e.getMessage());
-            JsonObject fail = new JsonObject();
-            fail.addProperty("error", e.getMessage());
-            return fail;
+        } catch (IllegalStateException | IllegalArgumentException e) {
+            return error(e, "Failed to encode the advancement {}!", holder.id().toString());
+        } catch (Exception e){
+            return error(e, "Failed to encode the advancement {} due to an unexpected error!", holder.id().toString());
         }
     }
 
@@ -72,12 +70,18 @@ public class AdvancementTool {
             result.add("remaining", remaining);
             result.addProperty("done_percent", progress.getPercent());
             return result;
-        } catch (IllegalStateException e) {
-            AdvancementHelper.LOGGER.error("Failed to encode the progress of the advancement {}", progress.toString());
-            AdvancementHelper.LOGGER.error(e.getMessage());
-            JsonObject fail = new JsonObject();
-            fail.addProperty("error", e.getMessage());
-            return fail;
+        } catch (IllegalStateException | IllegalArgumentException e) {
+            return error(e, "Failed to encode the progress of the advancement {}!", progress.toString());
+        } catch (Exception e){
+            return error(e, "Failed to encode the progress of the advancement {} due to an unexpected error!", progress.toString());
         }
+    }
+
+    private static JsonElement error(Exception exception, String str1, String str2) {
+        AdvancementHelper.LOGGER.error(str1, str2);
+        AdvancementHelper.LOGGER.error(exception.getMessage());
+        JsonObject fail = new JsonObject();
+        fail.addProperty("error", exception.getMessage());
+        return fail;
     }
 }

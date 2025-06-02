@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings("unused")
 public class AdvancementHelper implements ClientModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("advhelper");
-    public static final String version = "2.0.0";
+    public static final String version = "2.1.0";
     @Override
     public void onInitializeClient() {
         ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> AdvancementCommand.register(dispatcher)));

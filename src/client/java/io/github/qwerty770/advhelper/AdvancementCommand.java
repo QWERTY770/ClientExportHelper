@@ -91,7 +91,7 @@ public class AdvancementCommand {
             for (FileWriter writer : fileWriterMap.values()){
                 writer.close();
             }
-            AdvancementHelper.LOGGER.info("Advancement Helper exported {} advancements", advancements.size());
+            AdvancementHelper.LOGGER.info("Advancement Helper exported {} advancements.", advancements.size());
             context.getSource().sendFeedback(Component.translatable("commands.advhelper.export.success"));
         }
         catch (IOException exception){
@@ -110,7 +110,7 @@ public class AdvancementCommand {
             FileWriter fileWriter = createFile(namespace, "progress");
             writeJson(fileWriter, json);
             fileWriter.close();
-            AdvancementHelper.LOGGER.info("Advancement Helper exported the advancements' progress of namespace {}", namespace);
+            AdvancementHelper.LOGGER.info("Advancement Helper exported the advancements' progress of namespace {}.", namespace);
             context.getSource().sendFeedback(Component.translatable("commands.advhelper.export.success"));
         }
         catch (IOException exception){
@@ -140,7 +140,7 @@ public class AdvancementCommand {
             for (FileWriter writer : fileWriterMap.values()){
                 writer.close();
             }
-            AdvancementHelper.LOGGER.info("Advancement Helper exported {} advancements' progress", progress.size());
+            AdvancementHelper.LOGGER.info("Advancement Helper exported {} advancements' progress.", progress.size());
             context.getSource().sendFeedback(Component.translatable("commands.advhelper.export.success"));
         }
         catch (IOException exception){
@@ -163,7 +163,7 @@ public class AdvancementCommand {
     }
 
     private static void sendFailure(IOException exception, CommandContext<FabricClientCommandSource> context){
-        AdvancementHelper.LOGGER.error("Failed to export to a file");
+        AdvancementHelper.LOGGER.error("Failed to export to a file!");
         AdvancementHelper.LOGGER.error(exception.getMessage());
         context.getSource().sendFeedback(Component.translatable("commands.advhelper.export.fail"));
     }
