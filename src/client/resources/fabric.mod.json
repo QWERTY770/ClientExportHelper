@@ -1,9 +1,9 @@
 {
 	"schemaVersion": 1,
-	"id": "advhelper",
+	"id": "clientexport",
 	"version": "${version}",
-	"name": "Advancement Helper",
-	"description": "Useful tools for advancements",
+	"name": "Client Export Helper",
+	"description": "Useful tools for exporting client data",
 	"authors": [
 		"QWERTY770"
 	],
@@ -15,11 +15,11 @@
 	"environment": "*",
 	"entrypoints": {
 		"client": [
-			"io.github.qwerty770.advhelper.AdvancementHelper"
+			"top.qwerty770.clientexport.ClientExportHelper"
 		]
 	},
 	"mixins": [
-		"advhelper.mixins.json"
+		"clientexport.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.15.0",

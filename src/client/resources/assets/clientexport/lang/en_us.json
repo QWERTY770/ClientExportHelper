@@ -1,0 +1,8 @@
+{
+  "commands.clientexport.advancements.success": "Successfully exported %s advancements",
+  "commands.clientexport.advancements.fail": "Failed to export advancements",
+  "commands.clientexport.progress.success": "Successfully exported %s lines of advancement progress",
+  "commands.clientexport.progress.fail": "Failed to export advancement progress",
+  "commands.clientexport.statistics.success": "Successfully exported %s lines of statistics",
+  "commands.clientexport.statistics.fail": "Failed to export statistics"
+}

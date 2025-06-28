@@ -1,12 +1,14 @@
 {
   "required": true,
-  "package": "io.github.qwerty770.advhelper.mixin",
+  "package": "top.qwerty770.clientexport.mixin",
   "compatibilityLevel": "JAVA_17",
   "minVersion": "0.8",
   "client": [
-    "ClientAdvancementsMixin"
+    "ClientAdvancementsAccessor"
   ],
   "mixins": [
+    "ServerStatsCounterAccessor",
+    "StatsCounterAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

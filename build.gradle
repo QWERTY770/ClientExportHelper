@@ -23,7 +23,7 @@ loom {
     splitEnvironmentSourceSets()
 
     mods {
-        "advhelper" {
+        "clientexport" {
             sourceSet sourceSets.main
             sourceSet sourceSets.client
         }
@@ -46,7 +46,7 @@ dependencies {
 	// modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
 }
 
-processResources {
+processClientResources {
 	inputs.property "version", project.version
 
 	filesMatching("fabric.mod.json") {

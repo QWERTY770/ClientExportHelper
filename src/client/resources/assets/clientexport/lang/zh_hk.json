@@ -1,0 +1,8 @@
+{
+  "commands.clientexport.advancements.success": "成功匯出%s个进度",
+  "commands.clientexport.advancements.fail": "匯出进度失敗",
+  "commands.clientexport.progress.success": "成功匯出%s条进度完成进展",
+  "commands.clientexport.progress.fail": "匯出进度完成进展失敗",
+  "commands.clientexport.statistics.success": "成功匯出%s条统计数据",
+  "commands.clientexport.statistics.fail": "匯出统计数据失敗"
+}

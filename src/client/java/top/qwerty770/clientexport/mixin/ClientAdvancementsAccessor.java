@@ -1,4 +1,4 @@
-package io.github.qwerty770.advhelper.mixin;
+package top.qwerty770.clientexport.mixin;
 
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 import java.util.Map;
 
 @Mixin(ClientAdvancements.class)
-public interface ClientAdvancementsMixin {
+public interface ClientAdvancementsAccessor {
     @Accessor("progress")
     Map<AdvancementHolder, AdvancementProgress> getProgress();
 }

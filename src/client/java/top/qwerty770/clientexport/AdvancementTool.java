@@ -1,18 +1,25 @@
-package io.github.qwerty770.advhelper;
+package top.qwerty770.clientexport;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
-import io.github.qwerty770.advhelper.mixin.ClientAdvancementsMixin;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.critereon.ImpossibleTrigger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientAdvancements;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import top.qwerty770.clientexport.mixin.ClientAdvancementsAccessor;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class AdvancementTool {
     public static AdvancementTree getAdvancementTree() {
@@ -27,6 +34,7 @@ public class AdvancementTool {
 
     public static JsonElement getJson(AdvancementHolder holder, AdvancementTree tree) {
         // To avoid exception "JsonSyntaxException: Missing trigger"
+        HashMap<String, Integer> enchantments = null;
         Advancement.Builder builder;
         Advancement advancement = holder.value();
         if (advancement.sendsTelemetryEvent()) {
@@ -34,7 +42,18 @@ public class AdvancementTool {
         } else {
             builder = Advancement.Builder.recipeAdvancement();
         }
-        advancement.display().ifPresent(builder::display);
+        if (advancement.display().isPresent()) {
+            ItemStack icon = advancement.display().get().getIcon();
+            if (icon.getComponents().has(DataComponents.ENCHANTMENTS)) {
+                // Enchantments are only registered on server side
+                enchantments = new HashMap<>();
+                for (Object2IntMap.Entry<Holder<Enchantment>> entry : Objects.requireNonNull(icon.get(DataComponents.ENCHANTMENTS)).entrySet()){
+                    enchantments.put(entry.getKey().getRegisteredName(), entry.getIntValue());
+                }
+                icon.remove(DataComponents.ENCHANTMENTS);
+            }
+            builder.display(advancement.display().get());
+        }
         builder.rewards(advancement.rewards());
         builder.requirements(advancement.requirements());
         for (List<String> strings : advancement.requirements().requirements()) {
@@ -48,10 +67,14 @@ public class AdvancementTool {
             if (node != null) builder.parent(node.holder());
         }
         try {
-            return Advancement.CODEC.encodeStart(JsonOps.INSTANCE, builder.build(holder.id()).value()).getOrThrow();
-        } catch (IllegalStateException | IllegalArgumentException e) {
-            return error(e, "Failed to encode the advancement {}!", holder.id().toString());
-        } catch (Exception e){
+            JsonObject jsonObject = (JsonObject) Advancement.CODEC.encodeStart(JsonOps.INSTANCE, builder.build(holder.id()).value()).getOrThrow();
+            if (enchantments != null){
+                JsonObject object = new JsonObject();
+                enchantments.forEach(object::addProperty);
+                jsonObject.add("icon_enchantments", object);
+            }
+            return jsonObject;
+        } catch (Exception e) {
             return error(e, "Failed to encode the advancement {} due to an unexpected error!", holder.id().toString());
         }
     }
@@ -59,7 +82,7 @@ public class AdvancementTool {
     public static Map<AdvancementHolder, AdvancementProgress> getProgress() {
         assert Minecraft.getInstance().player != null;
         ClientAdvancements clientAdvancements = Minecraft.getInstance().player.connection.getAdvancements();
-        return ((ClientAdvancementsMixin) clientAdvancements).getProgress();
+        return ((ClientAdvancementsAccessor) clientAdvancements).getProgress();
     }
 
     public static JsonElement getJson(AdvancementProgress progress) {
@@ -72,14 +95,14 @@ public class AdvancementTool {
             return result;
         } catch (IllegalStateException | IllegalArgumentException e) {
             return error(e, "Failed to encode the progress of the advancement {}!", progress.toString());
-        } catch (Exception e){
+        } catch (Exception e) {
             return error(e, "Failed to encode the progress of the advancement {} due to an unexpected error!", progress.toString());
         }
     }
 
     private static JsonElement error(Exception exception, String str1, String str2) {
-        AdvancementHelper.LOGGER.error(str1, str2);
-        AdvancementHelper.LOGGER.error(exception.getMessage());
+        ClientExportHelper.LOGGER.error(str1, str2);
+        ClientExportHelper.LOGGER.error(exception.getMessage());
         JsonObject fail = new JsonObject();
         fail.addProperty("error", exception.getMessage());
         return fail;
